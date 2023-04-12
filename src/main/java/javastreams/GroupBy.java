@@ -1,5 +1,8 @@
 package javastreams;
 
+import lombok.Getter;
+import lombok.ToString;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -97,11 +100,11 @@ public class GroupBy {
     public void groupByCityAndSortByCity(List<Photo> photos){
         // key would be city and value would be list of Photos grouped by city
         // by default result of groupingBy is collected in HashMap which does not preserve the insertion order which is required if sorting applied to the grouping key
-        Map<String, List<Photo>> photosGroupedByCity = photos.stream()
+        Map<String, List<Photo>> photosGroupsSorted = photos.stream()
                 .sorted(Comparator.comparing(photo -> photo.city))
-                .collect(Collectors.groupingBy(photo -> photo.city),
+                .collect(Collectors.groupingBy(photo -> photo.city,
                         LinkedHashMap::new, // in order to preserve the sorted order after groupingBy, collect the result in LinkedHashMap to preserve the insertion order
-                        Collectors.toList()); // value List<Photo> would be collected in ArrayList
+                        Collectors.toList())); // value List<Photo> would be collected in ArrayList
 
         for(Map.Entry<String, List<Photo>> entry : photosGroupsSorted.entrySet()){
             System.out.println(entry);
@@ -118,10 +121,13 @@ public class GroupBy {
         GroupBy g = new GroupBy();
 //        g.groupByCity(List.of(p1,p2,p3,p4,p5));
 //        g.groupByCityAndSortByTime(List.of(p1,p2,p3,p4,p5));
-        g.groupByCityAndSortByTimeAndModifyListObjectsAfterSorting(List.of(p1,p2,p3,p4,p5));
+//        g.groupByCityAndSortByTimeAndModifyListObjectsAfterSorting(List.of(p1,p2,p3,p4,p5));
+        g.groupByCityAndSortByCity(List.of(p1,p2,p3,p4,p5));
     }
 }
 
+@Getter
+@ToString
 class Photo {
     String name;
     String city;
@@ -134,19 +140,5 @@ class Photo {
         this.name = name;
         this.city = city;
         this.dateTime = dateTime;
-    }
-
-    public String getCity(String city){
-        return city;
-    }
-
-    @Override
-    public String toString() {
-        return "Photo{" +
-                "name='" + name + '\'' +
-                ", city='" + city + '\'' +
-                ", newName='" + newName + '\'' +
-                ", dateTime=" + dateTime +
-                '}';
     }
 }
