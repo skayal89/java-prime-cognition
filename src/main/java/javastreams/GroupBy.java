@@ -15,25 +15,50 @@ public class GroupBy {
     public void groupByCity(List<Photo> photos){
         // key would be city and value would be list objects grouped by city
         Map<String, List<Photo>> res = photos.stream() // resultant lists would be ArrayList by default
-                .collect(Collectors.groupingBy(photo -> photo.city)); // by default groupingBy will call toList() to collect the result
+                .collect(Collectors.groupingBy(Photo::getCity)); // by default groupingBy will call toList() to collect the result
         System.out.println(res);
     }
 
     public void groupByCityAndCollectInLinkedList(List<Photo> photos){
         // key would be city and value would be list objects grouped by city
         Map<String, List<Photo>> res = photos.stream() // resultant lists would be LinkedList
-                .collect(Collectors.groupingBy(photo -> photo.city, Collectors.toCollection(LinkedList::new)));
-        System.out.println(res);
+                .collect(Collectors.groupingBy(Photo::getCity, Collectors.toCollection(LinkedList::new)));
+        res.entrySet().forEach(System.out::println);
+    }
+
+    public void groupByCityAndCollectInTreeSetToSortByTime(List<Photo> photos){
+        // key would be city and value would be list objects grouped by city
+        // this is an example where we are trying to collect in a collection which needs Comparator
+        // also this is a cleanest way to sort the value list after groupingBy
+        Map<String, Set<Photo>> res = photos.stream() // resultant lists would be TreeSet which will be sorted
+                .collect(Collectors.groupingBy(Photo::getCity,
+                        Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(Photo::getDateTime)))));
+        res.entrySet().forEach(System.out::println);
+    }
+
+    public Map<String, Collection<Photo>> groupByCityAndCollectInTreeSetToSortByTimeAndPopulateNewName(List<Photo> photos){
+        // key would be city and value would be list objects grouped by city
+        // this is an example where we are trying to collect in a collection which needs Comparator
+        // also this is a cleanest way to sort the value list after groupingBy
+        Map<String, Collection<Photo>> res = photos.stream() // resultant lists would be TreeSet (BST) which will be sorted
+                .collect(Collectors.groupingBy(Photo::getCity,
+                        Collectors.collectingAndThen(
+                                Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(Photo::getDateTime))), // sort the photos groupingBy city
+                                p -> new LinkedList<>(populateNewNameAndLikes(p)) // populate new name and likes and preserve the sorted order using LinkedList
+                        )
+                        ));
+        res.entrySet().forEach(System.out::println);
+        return res;
     }
 
     public void groupByCityAndSortValueListOfEachGroupByTime(List<Photo> photos){
         // key would be city and value would be sorted list objects grouped by city
         Map<String, List<Photo>> photosGroupedByCityAndSortByTime = photos.stream()
-                .collect(Collectors.groupingBy(photo -> photo.city, // group by city
+                .collect(Collectors.groupingBy(Photo::getCity, // group by city
                         Collectors.mapping(Function.identity(), // sort collected objects by time and store them in a list as the value of corresponding city
                                 Collectors.collectingAndThen(Collectors.toList(),
                                         e -> e.stream()
-                                                .sorted(Comparator.comparing(photo -> photo.dateTime))
+                                                .sorted(Comparator.comparing(Photo::getDateTime))
                                                 .collect(Collectors.toList())))));
 
         for(Map.Entry<String, List<Photo>> entry : photosGroupedByCityAndSortByTime.entrySet()){
@@ -43,12 +68,13 @@ public class GroupBy {
 
     public void groupByCityAndSortByTimeAndModifyListObjectsAfterSorting(List<Photo> photos){
         // key would be city and value would be sorted list objects grouped by city
+        // groupByCityAndCollectInTreeSetToSortByTimeAndPopulateNewName() method is better than this one. This method shows another way of doing the task.
         Map<String, List<Photo>> photosGroupedByCityAndSortByTime = photos.stream()
-                .collect(Collectors.groupingBy(photo -> photo.city, // group by city
+                .collect(Collectors.groupingBy(Photo::getCity, // group by city
                         Collectors.mapping(Function.identity(), // sort collected objects by time and store them in a list as the value of corresponding city
                                 Collectors.collectingAndThen(Collectors.toList(),
                                         e -> e.stream()
-                                                .sorted(Comparator.comparing(photo -> photo.dateTime))
+                                                .sorted(Comparator.comparing(Photo::getDateTime))
                                                 .collect(Collectors.toList())))));
 
         photosGroupedByCityAndSortByTime.entrySet()
@@ -60,12 +86,13 @@ public class GroupBy {
         }
     }
 
-    private void populateNewNameAndLikes(List<Photo> photos){
+    private Collection<Photo> populateNewNameAndLikes(Collection<Photo> photos){
         int i = 1;
         for(Photo p : photos){
-            p.newName = p.name + i++;
-            p.likes = getRandomNumberUsingNextInt(50, 200);
+            p.setNewName(p.getName() + i++);
+            p.setLikes(getRandomNumberUsingNextInt(50, 200));
         }
+        return photos;
     }
 
     public int getRandomNumberUsingNextInt(int min, int max) {
@@ -76,11 +103,11 @@ public class GroupBy {
     public void groupByCityAndSortByTimeAndPopulateLikesAndFlattenAllPhotosSortedByLikesDesc(List<Photo> photos){
         // key would be city and value would be sorted list objects grouped by city
         Map<String, List<Photo>> photosGroupedByCityAndSortByTime = photos.stream()
-                .collect(Collectors.groupingBy(photo -> photo.city, // group by city
+                .collect(Collectors.groupingBy(Photo::getCity, // group by city
                         Collectors.mapping(Function.identity(), // sort collected objects by time and store them in a list as the value of corresponding city
                                 Collectors.collectingAndThen(Collectors.toList(),
                                         e -> e.stream()
-                                                .sorted(Comparator.comparing(photo -> photo.dateTime))
+                                                .sorted(Comparator.comparing(Photo::getDateTime))
                                                 .collect(Collectors.toList())))));
 
         photosGroupedByCityAndSortByTime.entrySet()
@@ -89,7 +116,7 @@ public class GroupBy {
 
         List<Photo> sortedByLikeDesc = photosGroupedByCityAndSortByTime.values().stream()
                 .flatMap(List::stream)
-                .sorted(Comparator.comparing(p -> p.likes, Comparator.reverseOrder()))
+                .sorted(Comparator.comparing(Photo::getLikes, Comparator.reverseOrder()))
                 .toList();
 
         for(Map.Entry<String, List<Photo>> entry : photosGroupedByCityAndSortByTime.entrySet()){
@@ -99,10 +126,10 @@ public class GroupBy {
 
     public void groupByCityAndSortByCity(List<Photo> photos){
         // key would be city and value would be list of Photos grouped by city
-        // by default result of groupingBy is collected in HashMap which does not preserve the insertion order which is required if sorting applied to the grouping key
+        // by default result of groupingBy is collected in HashMap which does not preserve the insertion order which is required if sorting applied before the grouping
         Map<String, List<Photo>> photosGroupsSorted = photos.stream()
-                .sorted(Comparator.comparing(photo -> photo.city))
-                .collect(Collectors.groupingBy(photo -> photo.city,
+                .sorted(Comparator.comparing(Photo::getDateTime))
+                .collect(Collectors.groupingBy(Photo::getCity,
                         LinkedHashMap::new, // in order to preserve the sorted order after groupingBy, collect the result in LinkedHashMap to preserve the insertion order
                         Collectors.toList())); // value List<Photo> would be collected in ArrayList
 
@@ -112,33 +139,10 @@ public class GroupBy {
     }
 
     public static void main(String[] args) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        Photo p1 = new Photo("abc", "kol", LocalDateTime.parse("2022-01-03 13:09:08", formatter));
-        Photo p2 = new Photo("def", "kol", LocalDateTime.parse("2018-01-03 13:09:08", formatter));
-        Photo p3 = new Photo("pqr", "hyd", LocalDateTime.parse("2019-01-03 13:09:08", formatter));
-        Photo p4 = new Photo("xyz", "hyd", LocalDateTime.parse("2017-01-03 13:09:08", formatter));
-        Photo p5 = new Photo("wtey", "kol", LocalDateTime.parse("2021-01-03 13:09:08", formatter));
         GroupBy g = new GroupBy();
 //        g.groupByCity(List.of(p1,p2,p3,p4,p5));
 //        g.groupByCityAndSortByTime(List.of(p1,p2,p3,p4,p5));
 //        g.groupByCityAndSortByTimeAndModifyListObjectsAfterSorting(List.of(p1,p2,p3,p4,p5));
-        g.groupByCityAndSortByCity(List.of(p1,p2,p3,p4,p5));
-    }
-}
-
-@Getter
-@ToString
-class Photo {
-    String name;
-    String city;
-    String newName;
-    LocalDateTime dateTime;
-
-    int likes;
-
-    public Photo(String name, String city, LocalDateTime dateTime){
-        this.name = name;
-        this.city = city;
-        this.dateTime = dateTime;
+        g.groupByCityAndCollectInTreeSetToSortByTimeAndPopulateNewName(Photo.getSamplePhotos());
     }
 }
