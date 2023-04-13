@@ -12,6 +12,7 @@ public class MapStreamCode {
 //      third parameter of toMap() is to handle the collision of key, otherwise IllegalStateException would be thrown
 //      most important thing to note is boxed(). It's required because Arrays.stream(a) gives IntStream
 //      but in order to collect the integers in Map we need Stream<Integer>.
+//      Arrays.asList() also creates List object, then we can use stream() with it, then boxed() is not required
         Map<Integer, Integer> countMap = Arrays.stream(a)
                 .boxed()
                 .collect(Collectors.toMap(e -> e, v -> 1, Integer::sum));
