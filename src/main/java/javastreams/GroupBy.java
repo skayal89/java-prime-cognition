@@ -90,7 +90,7 @@ public class GroupBy {
         int i = 1;
         for(Photo p : photos){
             p.setNewName(p.getName() + i++);
-            p.setLikes(getRandomNumberUsingNextInt(50, 200));
+//            p.setLikes(getRandomNumberUsingNextInt(50, 200));
         }
         return photos;
     }
