@@ -89,9 +89,20 @@ public class StringOperation {
         return photoNames;
     }
 
+    public String sortString1(String s){
+        char c[] = s.toCharArray();
+        Arrays.sort(c);
+        return new String(c);
+    }
+
+    public String sortString2(String s){
+        return s.chars().boxed().map(Character::toString).sorted().collect(Collectors.joining());
+    }
+
     public static void main(String[] args) {
         StringOperation so = new StringOperation();
 //        so.getNameOfAllPhotos(Photo.getSamplePhotos());
-        so.splitStringAndConvertToListUsing3ParamCollect();
+//        so.splitStringAndConvertToListUsing3ParamCollect();
+        System.out.println(so.sortString2("geeksforgeeks"));
     }
 }
