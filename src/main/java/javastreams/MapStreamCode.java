@@ -1,5 +1,7 @@
 package javastreams;
 
+import model.Photo;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -91,6 +93,7 @@ public class MapStreamCode {
 //        test.indexPhotoByName(Photo.getSamplePhotos());
 //        System.out.println(test.findPhotoByName(Photo.getSamplePhotos(), "abc"));
 //        System.out.println(test.findPhotoByName(Photo.getSamplePhotos(), "abcd"));
-        test.getPhotosSortedByCityAndTime(Photo.getSamplePhotos());
+//        test.getPhotosSortedByCityAndTime(Photo.getSamplePhotos());
+
     }
 }

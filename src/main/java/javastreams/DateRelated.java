@@ -56,6 +56,9 @@ public class DateRelated {
         long month = ChronoUnit.MONTHS.between(dateBefore, dateAfter);
         long years = ChronoUnit.YEARS.between(dateBefore, dateAfter);
 
+        long minutes = ChronoUnit.MINUTES.between(dateBefore, dateAfter);
+        long hours = ChronoUnit.HOURS.between(dateBefore, dateAfter);
+
         System.out.println(years + " years "+ month + " months "+days+" days between "+dateBefore+" and "+dateAfter);
     }
 

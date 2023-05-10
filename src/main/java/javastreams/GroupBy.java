@@ -1,10 +1,7 @@
 package javastreams;
 
-import lombok.Getter;
-import lombok.ToString;
+import model.Photo;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.*;

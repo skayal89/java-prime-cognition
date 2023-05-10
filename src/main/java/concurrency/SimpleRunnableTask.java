@@ -7,12 +7,13 @@ public class SimpleRunnableTask implements Runnable {
     public void run() {
         long startTime = System.currentTimeMillis();
         Random random = new Random();
-        int times = 100000;
+        int times = 10;
+        System.out.println(Thread.currentThread().getName() + " start time "+ startTime);
         while(times-- > 0){
-            int rand = random.nextInt(10000 - 1000) + 1000;
-            System.out.println(Thread.currentThread().getName() + "thread is running. Rand - "+rand);
+            int rand = random.nextInt(100 - 1) + 1;
+            System.out.println(Thread.currentThread().getName() + " thread is running. Rand - "+rand);
             try {
-                Thread.sleep(1000);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
