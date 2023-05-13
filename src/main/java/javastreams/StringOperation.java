@@ -106,5 +106,12 @@ public class StringOperation {
 //        so.getNameOfAllPhotos(Photo.getSamplePhotos());
 //        so.splitStringAndConvertToListUsing3ParamCollect();
         System.out.println(so.sortString2("geeksforgeeks"));
+
+        char ch = 'a';
+        int[] hash = new int[256];
+        hash[ch]++;
+        System.out.println(((int)ch));
+        System.out.println(hash[ch]);
+        System.out.println(ch - 'a');
     }
 }

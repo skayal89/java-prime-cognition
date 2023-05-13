@@ -2,6 +2,7 @@ package javastreams;
 
 import model.Photo;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.*;
@@ -30,6 +31,16 @@ public class GroupBy {
         Map<String, Set<Photo>> res = photos.stream() // resultant lists would be TreeSet which will be sorted
                 .collect(Collectors.groupingBy(Photo::getCity,
                         Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(Photo::getDateTime)))));
+        res.entrySet().forEach(System.out::println);
+    }
+
+    public void groupByCityAndCollectDateTimeToSortByCity(List<Photo> photos) {
+//        compute the set of last names of people in each city, where the city names are sorted
+        Map<String, Set<LocalDateTime>> res = photos.stream() // resultant lists would be TreeSet which will be sorted
+                .collect(Collectors.groupingBy(
+                        Photo::getCity, // grouping by city
+                        TreeMap::new, // sort by city which the grouping by
+                        Collectors.mapping(Photo::getDateTime, Collectors.toSet()))); // mapping() helped to collect Set<LocalDateTime> instead of Set<Photo>
         res.entrySet().forEach(System.out::println);
     }
 
@@ -114,7 +125,7 @@ public class GroupBy {
         List<Photo> sortedByLikeDesc = photosGroupedByCityAndSortByTime.values().stream()
                 .flatMap(List::stream)
                 .sorted(Comparator.comparing(Photo::getLikes, Comparator.reverseOrder()))
-                .toList();
+                .collect(Collectors.toList());
 
         for(Map.Entry<String, List<Photo>> entry : photosGroupedByCityAndSortByTime.entrySet()){
             System.out.println(entry);
@@ -140,6 +151,7 @@ public class GroupBy {
 //        g.groupByCity(List.of(p1,p2,p3,p4,p5));
 //        g.groupByCityAndSortByTime(List.of(p1,p2,p3,p4,p5));
 //        g.groupByCityAndSortByTimeAndModifyListObjectsAfterSorting(List.of(p1,p2,p3,p4,p5));
-        g.groupByCityAndCollectInTreeSetToSortByTimeAndPopulateNewName(Photo.getSamplePhotos());
+//        g.groupByCityAndCollectInTreeSetToSortByTimeAndPopulateNewName(Photo.getSamplePhotos());
+        g.groupByCityAndCollectDateTimeToSortByCity(Photo.getSamplePhotos());
     }
 }
