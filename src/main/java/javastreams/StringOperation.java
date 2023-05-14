@@ -3,7 +3,9 @@ package javastreams;
 import model.Photo;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class StringOperation {
 
@@ -101,17 +103,65 @@ public class StringOperation {
         return s.chars().boxed().map(Character::toString).sorted().collect(Collectors.joining());
     }
 
-    public static void main(String[] args) {
-        StringOperation so = new StringOperation();
-//        so.getNameOfAllPhotos(Photo.getSamplePhotos());
-//        so.splitStringAndConvertToListUsing3ParamCollect();
-        System.out.println(so.sortString2("geeksforgeeks"));
+    public void countChars(String s){
+        Map<String, Integer> countMap = s.chars().boxed().map(Character::toString).collect(Collectors.toMap(Function.identity(), v -> 1, Integer::sum));
+        System.out.println(countMap);
+    }
 
+    public String firstNonRepeatingCharacters(String s){
+        // see below method for handling null safety for stream in case of s is null
+        String firstNonRepeatedChar = s.chars()
+                .boxed()
+                .map(Character::toString)
+                .collect(
+                        Collectors.collectingAndThen(
+                                Collectors.toMap(Function.identity(), v -> 1, Integer::sum, LinkedHashMap::new),
+                                p -> p.entrySet().stream()
+                                        .filter(entry -> entry.getValue() == 1)
+                                        .findFirst()
+                                        .orElseThrow(() -> new NoSuchElementException("Non Repeated Char is not present"))
+                                        .getKey()
+                        )
+
+                );
+        return firstNonRepeatedChar;
+    }
+
+    public String firstNonRepeatingCharactersNullSafe(String s){
+        String firstNonRepeatedChar = Optional.ofNullable(s).orElseThrow(NullPointerException::new).chars()
+                .boxed()
+                .map(Character::toString)
+                .collect(
+                        Collectors.collectingAndThen(
+                                Collectors.toMap(Function.identity(), v -> 1, Integer::sum, LinkedHashMap::new),
+                                p -> p.entrySet().stream()
+                                        .filter(entry -> entry.getValue() == 1)
+                                        .findFirst()
+                                        .orElseThrow(() -> new NoSuchElementException("Non Repeated Char is not present"))
+                                        .getKey()
+                        )
+
+                );
+        return firstNonRepeatedChar;
+    }
+
+    public void testCharAsIndex(){
         char ch = 'a';
         int[] hash = new int[256];
         hash[ch]++;
         System.out.println(((int)ch));
         System.out.println(hash[ch]);
         System.out.println(ch - 'a');
+    }
+
+    public static void main(String[] args) {
+        StringOperation so = new StringOperation();
+//        so.getNameOfAllPhotos(Photo.getSamplePhotos());
+//        so.splitStringAndConvertToListUsing3ParamCollect();
+//        System.out.println(so.sortString2("geeksforgeeks"));
+        so.countChars("geeksforgeeks");
+        System.out.println(so.firstNonRepeatingCharacters("geeksforgeeks"));
+        System.out.println(so.firstNonRepeatingCharacters("geeksforgeeksfor"));
+
     }
 }
