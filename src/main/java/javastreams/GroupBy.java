@@ -39,7 +39,7 @@ public class GroupBy {
         Map<String, Set<LocalDateTime>> res = photos.stream() // resultant lists would be TreeSet which will be sorted
                 .collect(Collectors.groupingBy(
                         Photo::getCity, // grouping by city
-                        TreeMap::new, // sort by city which the grouping by
+                        TreeMap::new, // sort by city which is the grouping by
                         Collectors.mapping(Photo::getDateTime, Collectors.toSet()))); // mapping() helped to collect Set<LocalDateTime> instead of Set<Photo>
         res.entrySet().forEach(System.out::println);
     }

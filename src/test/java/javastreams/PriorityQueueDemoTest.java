@@ -12,6 +12,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.PriorityQueue;
 
 @ExtendWith(MockitoExtension.class)
 class PriorityQueueDemoTest {
@@ -31,7 +32,7 @@ class PriorityQueueDemoTest {
         int k = 3;
         int res = toTest.getKMin(input, k);
         verify(toTest).buildMinHeap(anyList());
-        verify(toTest).validate(any(), eq(k));
+        verify(toTest).validate(isNotNull(), eq(k));
 
         assertEquals(4, res);
     }
@@ -56,7 +57,7 @@ class PriorityQueueDemoTest {
             toTest.getKMin(input, k);
             verify(toTest).buildMinHeap(anyList());
             verify(toTest).validate(any(), eq(k));
-            verify(toTest, never()).pollKMin(any(), anyInt());
+            verify(toTest, never()).pollKMin(isNotNull(PriorityQueue.class), anyInt());
         });
 
         String expected = "k is larger than input";

@@ -104,7 +104,10 @@ public class StringOperation {
     }
 
     public void countChars(String s){
-        Map<String, Integer> countMap = s.chars().boxed().map(Character::toString).collect(Collectors.toMap(Function.identity(), v -> 1, Integer::sum));
+        Map<String, Integer> countMap = s.chars()
+                .boxed()
+                .map(Character::toString)
+                .collect(Collectors.toMap(Function.identity(), v -> 1, Integer::sum));
         System.out.println(countMap);
     }
 
@@ -128,7 +131,8 @@ public class StringOperation {
     }
 
     public String firstNonRepeatingCharactersNullSafe(String s){
-        String firstNonRepeatedChar = Optional.ofNullable(s).orElseThrow(NullPointerException::new).chars()
+        String firstNonRepeatedChar = Optional.ofNullable(s).orElseThrow(NullPointerException::new)
+                .chars()
                 .boxed()
                 .map(Character::toString)
                 .collect(

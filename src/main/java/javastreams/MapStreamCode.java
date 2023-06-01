@@ -17,7 +17,7 @@ public class MapStreamCode {
 //      Arrays.asList() also creates List object, then we can use stream() with it, then boxed() is not required
         Map<Integer, Integer> countMap = Arrays.stream(a)
                 .boxed()
-                .collect(Collectors.toMap(e -> e, v -> 1, Integer::sum));
+                .collect(Collectors.toMap(e -> e, v -> 1, Integer::sum)); // default resultant Map is HashMap, can be changed using 4th param
 
         countMap.entrySet().forEach(System.out::println);
     }
