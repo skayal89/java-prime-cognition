@@ -1,4 +1,4 @@
-package javastreams;
+package com.javastreams;
 
 import model.Photo;
 
@@ -36,7 +36,7 @@ public class GroupBy {
 
     public void groupByCityAndCollectDateTimeToSortByCity(List<Photo> photos) {
 //        compute the set of last names of people in each city, where the city names are sorted
-        Map<String, Set<LocalDateTime>> res = photos.stream() // resultant lists would be TreeSet which will be sorted
+        Map<String, Set<LocalDateTime>> res = photos.stream()
                 .collect(Collectors.groupingBy(
                         Photo::getCity, // grouping by city
                         TreeMap::new, // sort by city which is the grouping by
@@ -153,5 +153,11 @@ public class GroupBy {
 //        g.groupByCityAndSortByTimeAndModifyListObjectsAfterSorting(List.of(p1,p2,p3,p4,p5));
 //        g.groupByCityAndCollectInTreeSetToSortByTimeAndPopulateNewName(Photo.getSamplePhotos());
         g.groupByCityAndCollectDateTimeToSortByCity(Photo.getSamplePhotos());
+
+        List<Integer> list = List.of(10,20,30,40);
+        int sum = list.stream().reduce(0, Integer::sum);
+        System.out.println("sum of numbers:"+sum);
     }
+
+
 }

@@ -1,4 +1,4 @@
-package javastreams;
+package com.javastreams;
 
 import lombok.Getter;
 import lombok.Setter;

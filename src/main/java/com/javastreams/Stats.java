@@ -1,4 +1,4 @@
-package javastreams;
+package com.javastreams;
 
 import model.Photo;
 

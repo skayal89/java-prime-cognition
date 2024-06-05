@@ -1,8 +1,7 @@
-package javastreams;
+package com.javastreams;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;

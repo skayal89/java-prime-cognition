@@ -1,9 +1,8 @@
-package javastreams;
+package com.javastreams;
 
+import com.javastreams.TreeMapDemo;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class TreeMapDemoTest {
 

@@ -1,3 +1,5 @@
+package com.other;
+
 import java.util.Arrays;
 
 public class GenerateNextPermutation {

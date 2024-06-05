@@ -1,4 +1,4 @@
-package javastreams;
+package com.javastreams;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

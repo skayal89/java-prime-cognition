@@ -1,13 +1,13 @@
-package javastreams;
+package com.javastreams;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import com.javastreams.PriorityQueueDemo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 

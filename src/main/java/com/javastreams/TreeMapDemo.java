@@ -1,8 +1,7 @@
-package javastreams;
+package com.javastreams;
 
 import java.util.List;
 import java.util.TreeMap;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class TreeMapDemo {
@@ -12,7 +11,7 @@ public class TreeMapDemo {
                 .collect(Collectors.toMap(
                         i -> i, // keyMapper, i -> i is equivalent to Function.identity()
                         v -> 1, // valueMapper
-                        (oldValue, newValue) -> oldValue + 1, // mergerFunction to handle collision
+                        (oldValue, newValue) -> oldValue + 1, // mergerFunction to handle collision, Integer::sum can also be used.
                         TreeMap::new)); // mapFactory - default is HashMap::new
         return valueCountMap;
     }

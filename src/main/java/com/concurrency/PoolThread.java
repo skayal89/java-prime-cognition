@@ -1,6 +1,5 @@
-package concurrency;
+package com.concurrency;
 
-import java.util.Random;
 import java.util.concurrent.*;
 
 public class PoolThread {
