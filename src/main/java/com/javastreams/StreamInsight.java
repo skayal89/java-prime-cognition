@@ -1,5 +1,6 @@
 package com.javastreams;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,6 +10,7 @@ import java.time.Month;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class StreamInsight {
 
@@ -184,6 +186,55 @@ public class StreamInsight {
         Collections.sort(l1);
         int binarySearchResult = Collections.binarySearch(l1, 5);
         System.out.println("binarySearchResult "+binarySearchResult);
+
+        // reverse each word of a string
+        String s = "I say hello world";
+        String reversedWords = Arrays.stream(s.split(" "))
+                .map(str -> new StringBuilder(str).reverse())
+                .collect(Collectors.joining(" "));
+        System.out.println("reverse each word of a string - "+reversedWords);
+
+        // verify if two strings are anagram
+        String s1 = "tea", s2 = "eat";
+        s1 = s1.chars().boxed().map(Character::toString).map(String::toLowerCase).sorted().collect(Collectors.joining());
+        s2 = s2.chars().boxed().map(Character::toString).map(String::toLowerCase).sorted().collect(Collectors.joining());
+        boolean isAnagram = s1.equals(s2);
+        System.out.println("isAnagram "+isAnagram);
+
+        // count anagrams
+        String[] sin = new String[]{"tea","tan","ate","eat","nat","bat"};
+        Map<String, Long> countGroupedAnagram = Arrays.stream(sin)
+                .map(str -> str.chars().boxed().map(Character::toString).map(String::toLowerCase).sorted().collect(Collectors.joining()))
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        System.out.println("count groupedAnagram - "+countGroupedAnagram);
+
+        String[] sino = new String[]{"tea","tan","ate","eat","nat","bat"};
+        Map<String, List<String>> groupedAnagrams = groupAllAnagrams(sino);
+        System.out.println("groupedAnagrams - "+ groupedAnagrams);
+        System.out.println("groupedAnagrams - "+ groupedAnagrams.values());
+
+        sino = new String[]{"a"};
+        groupedAnagrams = groupAllAnagrams(sino);
+        System.out.println("groupedAnagrams - "+ groupedAnagrams);
+        System.out.println("groupedAnagrams - "+ groupedAnagrams.values());
+    }
+
+    public static Map<String, List<String>> groupAllAnagrams(String[] sino){
+        Map<String, List<String>> groupedAnagrams = IntStream.range(0, sino.length)
+                .mapToObj(i -> new Entry(sino[i].toLowerCase().chars().boxed().map(Character::toString).sorted().collect(Collectors.joining()), i))
+                .sorted(Comparator.comparing(Entry::getWord))
+                .collect(Collectors.groupingBy(Entry::getWord,
+                                Collectors.collectingAndThen(Collectors.toList(), entries -> entries.stream().map(e -> sino[e.getIndex()]).collect(Collectors.toList()))
+                        )
+                );
+        return groupedAnagrams;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    static class Entry{
+        String word;
+        int index;
     }
 
     @ToString

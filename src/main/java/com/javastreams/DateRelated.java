@@ -3,9 +3,7 @@ package com.javastreams;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class DateRelated {
 
@@ -129,6 +127,17 @@ public class DateRelated {
         return date.isEqual(date2);
     }
 
+    public static long countWeekDaysStream ( LocalDate start , LocalDate stop ) {
+        // Code taken from the Answer by Ravindra Ranwala.
+        // https://stackoverflow.com/a/51010738/642706
+        long count = 0;
+        Set< DayOfWeek > weekend = EnumSet.of( DayOfWeek.SATURDAY , DayOfWeek.SUNDAY );
+        final long weekDaysBetween = start.datesUntil( stop )
+                .filter( d -> ! weekend.contains( d.getDayOfWeek() ) )
+                .count();
+        return weekDaysBetween;
+    }
+
     public static void main(String[] args) {
         DateRelated dateRelated = new DateRelated();
 //        System.out.println(dateRelated.toDate("2013-01-03 13:03"));
@@ -138,5 +147,7 @@ public class DateRelated {
 //        System.out.println(dateRelated.allLeapYears(2000, 2023));
 //        dateRelated.getFutureDate();
         System.out.println(dateRelated.isEqualDate());
+        System.out.println(LocalDate.now().minusDays(12));
+        System.out.println(countWeekDaysStream(LocalDate.now().minusDays(10), LocalDate.now()));
     }
 }
