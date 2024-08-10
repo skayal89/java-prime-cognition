@@ -222,9 +222,9 @@ public class StreamInsight {
     public static Map<String, List<String>> groupAllAnagrams(String[] sino){
         Map<String, List<String>> groupedAnagrams = IntStream.range(0, sino.length)
                 .mapToObj(i -> new Entry(sino[i].toLowerCase().chars().boxed().map(Character::toString).sorted().collect(Collectors.joining()), i))
-                .sorted(Comparator.comparing(Entry::getWord))
-                .collect(Collectors.groupingBy(Entry::getWord,
-                                Collectors.collectingAndThen(Collectors.toList(), entries -> entries.stream().map(e -> sino[e.getIndex()]).collect(Collectors.toList()))
+//                .sorted(Comparator.comparing(Entry::getWord))
+                .collect(Collectors.groupingBy(Entry::getWord, Collectors.mapping(e -> sino[e.getIndex()], Collectors.toList())
+//                                Collectors.collectingAndThen(Collectors.toList(), entries -> entries.stream().map(e -> sino[e.getIndex()]).collect(Collectors.toList()))
                         )
                 );
         return groupedAnagrams;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Subset {
+    // https://leetcode.com/problems/subsets/description/
     private List<List<Integer>> out = new ArrayList<>();
     public List<List<Integer>> subsets(int[] nums) {
         powerSet(nums,0,new ArrayList<Integer>(),0);
